@@ -26,7 +26,6 @@
   button:hover {
     transform: scale(1.1);
   }
-  .hidden { display: none; }
   #hearts {
     position: fixed;
     top: 0;
@@ -79,23 +78,22 @@ const finalMessage = document.getElementById("finalMessage");
 const heartsDiv = document.getElementById("hearts");
 const hint = document.getElementById("hint");
 
-let noCount = 0; // tracks "No" clicks on Level 2
-let hintTimeout;  // to fade out hint
+let noCount = 0;
+let hintTimeout = null;
 
 startBtn.onclick = () => {
-  story.textContent = "Level 1: We matched on that app and have been texting since January 2026… Are you ready to take our adventure to the next level?";
+  story.textContent = "Level 1: We matched on that app and have been texting since Late 2025… Are you ready to take our adventure to the next level?";
   startBtn.style.display = "none";
   showChoices(["Yes", "No"], level2);
   hideHint();
 };
 
 function showChoices(options, callback) {
-  const buttons = options.map(opt => {
+  options.forEach(opt => {
     const btn = document.createElement("button");
     btn.textContent = opt;
     btn.onclick = () => callback(opt);
     gameDiv.appendChild(btn);
-    return btn;
   });
 }
 
@@ -110,6 +108,7 @@ function hideHint() {
   if (hintTimeout) clearTimeout(hintTimeout);
 }
 
+// ------------------- Level 2 -------------------
 function level2(choice) {
   clearChoices();
   if (choice === "Yes") {
@@ -120,17 +119,12 @@ function level2(choice) {
     noCount++;
     if (noCount === 1) {
       story.textContent = "Are you sure? 😅 I have a surprise if you say Yes!";
-      hint.textContent = "Hint: It’s full of ❤️ and fun!";
+      hint.textContent = "Hint: It’s full of ❤️ and fun! ⚡ P.S. Don’t be a Snorlax—wake up and say Yes! 😉";
       hint.style.opacity = 1;
-
-      // Fade out after 4 seconds if she doesn’t click Yes
-      hintTimeout = setTimeout(() => {
-        hint.style.opacity = 0;
-      }, 4000);
-
+      hintTimeout = setTimeout(() => hint.style.opacity = 0, 4000);
       showChoices(["Yes", "No"], level2);
     } else {
-      story.textContent = "Oh no! 😢 — Like a broken circuit, we’re not quite connected yet! 😢 —It's Okay, Since You Are Still As Cute As Ever..I Will Try Again!😉 ";
+      story.textContent = "Oh no! 😢 — Like a broken circuit, we’re not quite connected yet! 😉 — Try again!";
       showChoices(["Restart"], restartGame);
       noCount = 0;
       hideHint();
@@ -138,9 +132,10 @@ function level2(choice) {
   }
 }
 
+// ------------------- Final Level -------------------
 function finalLevel(choice) {
   clearChoices();
-  if(choice === "Yes") {
+  if (choice === "Yes") {
     story.textContent = "";
     finalMessage.style.display = "block";
     startHearts();
@@ -150,6 +145,7 @@ function finalLevel(choice) {
   }
 }
 
+// ------------------- Restart -------------------
 function restartGame() {
   clearChoices();
   finalMessage.style.display = "none";
@@ -159,6 +155,7 @@ function restartGame() {
   hideHint();
 }
 
+// ------------------- Hearts Animation -------------------
 function startHearts() {
   let count = 0;
   const heartInterval = setInterval(() => {
