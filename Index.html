@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relationship Quest</title>
+<style>
+    body {
+        font-family: 'Courier New', monospace;
+        background-color: #1e1e2f;
+        color: #fff;
+        text-align: center;
+        padding: 30px;
+    }
+    .level, .outcome, .start-screen {
+        display: none;
+        margin-top: 20px;
+    }
+    .visible { display: block; }
+    button {
+        font-family: monospace;
+        font-size: 16px;
+        padding: 10px 20px;
+        margin: 10px;
+        cursor: pointer;
+        border: 2px solid #fff;
+        border-radius: 10px;
+        background-color: #2e2e50;
+        color: #fff;
+    }
+    .hearts { color: pink; font-size: 24px; margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<h1>🎮 Relationship Quest 🎮</h1>
+<div class="start-screen visible">
+    <p>Welcome, hero! Ready to start the quest?</p>
+    <button onclick="startLevel1()">Start</button>
+</div>
+
+<div class="level" id="level1">
+    <h2>Level 1: Compatibility Check</h2>
+    <p>You like talking to me ✅<br>
+       I like talking to you ✅<br>
+       We laugh at dumb things ✅</p>
+    <button onclick="startLevel2()">Next Level</button>
+</div>
+
+<div class="level" id="level2">
+    <h2>Level 2: Choose Your Path</h2>
+    <button onclick="choosePath('adventure')">Adventure Together</button>
+    <button onclick="choosePath('friends')">Stay Friends</button>
+    <button onclick="choosePath('run')">Run Away</button>
+</div>
+
+<div class="outcome" id="outcome">
+    <h2 id="outcome-title"></h2>
+    <p id="outcome-text"></p>
+    <div class="hearts" id="hearts"></div>
+</div>
+
+<script>
+function startLevel1() {
+    document.querySelector('.start-screen').classList.remove('visible');
+    document.getElementById('level1').classList.add('visible');
+}
+
+function startLevel2() {
+    document.getElementById('level1').classList.remove('visible');
+    document.getElementById('level2').classList.add('visible');
+}
+
+function choosePath(path) {
+    document.getElementById('level2').classList.remove('visible');
+    document.getElementById('outcome').classList.add('visible');
+
+    let title = "";
+    let text = "";
+    let hearts = "";
+
+    if(path === 'adventure') {
+        title = "🎊 Achievement Unlocked: Girlfriend 🎊";
+        text = "You’ve unlocked the final boss and my heart.";
+        hearts = "💖💖💖💖💖";
+    } else if(path === 'friends') {
+        title = "😅 Friendship Mode Activated";
+        text = "I’ll keep trying to level up my heart stats ❤️";
+        hearts = "💛💛";
+    } else {
+        title = "💀 Game Over";
+        text = "Hero keeps retrying… infinite loops of messages 😭";
+        hearts = "💔";
+    }
+
+    document.getElementById('outcome-title').innerText = title;
+    document.getElementById('outcome-text').innerText = text;
+    document.getElementById('hearts').innerText = hearts;
+}
+</script>
+
+</body>
+</html>
