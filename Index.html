@@ -5,97 +5,166 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Relationship Quest</title>
 <style>
-    body {
-        font-family: 'Courier New', monospace;
-        background-color: #1e1e2f;
-        color: #fff;
-        text-align: center;
-        padding: 30px;
-    }
-    .level, .outcome, .start-screen {
-        display: none;
-        margin-top: 20px;
-    }
-    .visible { display: block; }
-    button {
-        font-family: monospace;
-        font-size: 16px;
-        padding: 10px 20px;
-        margin: 10px;
-        cursor: pointer;
-        border: 2px solid #fff;
-        border-radius: 10px;
-        background-color: #2e2e50;
-        color: #fff;
-    }
-    .hearts { color: pink; font-size: 24px; margin-top: 10px; }
+  body {
+    font-family: Arial, sans-serif;
+    background: #ffe6f0;
+    color: #333;
+    text-align: center;
+    padding: 50px;
+  }
+  button {
+    padding: 10px 20px;
+    font-size: 18px;
+    margin: 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    border: none;
+    background: #ff6b81;
+    color: white;
+    transition: transform 0.2s;
+  }
+  button:hover {
+    transform: scale(1.1);
+  }
+  .hidden { display: none; }
+  #hearts {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 1000;
+  }
+  .heart {
+    position: absolute;
+    font-size: 24px;
+    animation: floatUp 3s ease-out forwards;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-300px) scale(1.5); opacity: 0; }
+  }
+  #finalMessage {
+    font-size: 48px;
+    color: #ff3d7f;
+    margin-top: 50px;
+    display: none;
+  }
 </style>
 </head>
 <body>
 
 <h1>🎮 Relationship Quest 🎮</h1>
-<div class="start-screen visible">
-    <p>Welcome, hero! Ready to start the quest?</p>
-    <button onclick="startLevel1()">Start</button>
+<div id="game">
+  <p id="story">Are you ready for the adventure?</p>
+  <button id="startBtn">Start</button>
 </div>
 
-<div class="level" id="level1">
-    <h2>Level 1: Compatibility Check</h2>
-    <p>You like talking to me ✅<br>
-       I like talking to you ✅<br>
-       We laugh at dumb things ✅</p>
-    <button onclick="startLevel2()">Next Level</button>
-</div>
-
-<div class="level" id="level2">
-    <h2>Level 2: Choose Your Path</h2>
-    <button onclick="choosePath('adventure')">Adventure Together</button>
-    <button onclick="choosePath('friends')">Stay Friends</button>
-    <button onclick="choosePath('run')">Run Away</button>
-</div>
-
-<div class="outcome" id="outcome">
-    <h2 id="outcome-title"></h2>
-    <p id="outcome-text"></p>
-    <div class="hearts" id="hearts"></div>
-</div>
+<div id="finalMessage">💖 YES! 💖</div>
+<div id="hearts"></div>
 
 <script>
-function startLevel1() {
-    document.querySelector('.start-screen').classList.remove('visible');
-    document.getElementById('level1').classList.add('visible');
+const story = document.getElementById("story");
+const startBtn = document.getElementById("startBtn");
+const gameDiv = document.getElementById("game");
+const finalMessage = document.getElementById("finalMessage");
+const heartsDiv = document.getElementById("hearts");
+
+startBtn.onclick = () => {
+  story.textContent = "Level 1: We matched on that app and have been texting since January 2026… Are you ready to take our adventure to the next level?";
+  startBtn.style.display = "none";
+  showChoices(["Yes", "No"], level2);
+};
+
+function showChoices(options, callback) {
+  const buttons = options.map(opt => {
+    const btn = document.createElement("button");
+    btn.textContent = opt;
+    btn.onclick = () => callback(opt);
+    gameDiv.appendChild(btn);
+    return btn;
+  });
 }
 
-function startLevel2() {
-    document.getElementById('level1').classList.remove('visible');
-    document.getElementById('level2').classList.add('visible');
+function clearChoices() {
+  const buttons = gameDiv.querySelectorAll("button");
+  buttons.forEach(b => b.remove());
 }
 
-function choosePath(path) {
-    document.getElementById('level2').classList.remove('visible');
-    document.getElementById('outcome').classList.add('visible');
+let noCount = 0; // tracks how many times "No" was clicked
 
-    let title = "";
-    let text = "";
-    let hearts = "";
-
-    if(path === 'adventure') {
-        title = "🎊 Achievement Unlocked: Girlfriend 🎊";
-        text = "You’ve unlocked the final boss and my heart.";
-        hearts = "💖💖💖💖💖";
-    } else if(path === 'friends') {
-        title = "😅 Friendship Mode Activated";
-        text = "I’ll keep trying to level up my heart stats ❤️";
-        hearts = "💛💛";
+function level2(choice) {
+  clearChoices();
+  if(choice === "Yes") {
+    story.textContent = "Level 2: After all our texts and laughs, I have to ask… Will you be my girlfriend?";
+    showChoices(["Yes", "No"], finalLevel);
+  } else {
+    noCount++;
+    if(noCount === 1){
+      story.textContent = "Are you sure? 😅";
+      showChoices(["Yes", "No"], level2); // loop back for confirmation
     } else {
-        title = "💀 Game Over";
-        text = "Hero keeps retrying… infinite loops of messages 😭";
-        hearts = "💔";
+      story.textContent = "Oh no! Looks like we’re not ready yet 😢 — Try again!...Looks like i am stuck in an infinite loop of waiting 😅. I will try again.";
+      showChoices(["Restart"], restartGame);
+      noCount = 0; // reset for next round
     }
+  }
+}
 
-    document.getElementById('outcome-title').innerText = title;
-    document.getElementById('outcome-text').innerText = text;
-    document.getElementById('hearts').innerText = hearts;
+function finalLevel(choice) {
+  clearChoices();
+  if(choice === "Yes") {
+    story.textContent = "";
+    finalMessage.style.display = "block";
+    startHearts();
+  } else {
+    noCount++;
+    if(noCount === 1){
+      story.textContent = "Are you sure? 😅";
+      showChoices(["Yes", "No"], finalLevel); // confirmation loop
+    } else {
+      story.textContent = "Hmm… not yet 😅 — Try again!";
+      showChoices(["Restart"], restartGame);
+      noCount = 0; // reset
+    }
+  }
+}
+
+function finalLevel(choice) {
+  clearChoices();
+  if(choice === "Yes") {
+    story.textContent = "";
+    finalMessage.style.display = "block";
+    startHearts();
+  } else {
+    story.textContent = "Hmm… not yet 😅 — Try again!";
+    showChoices(["Restart"], restartGame);
+  }
+}
+
+function restartGame() {
+  clearChoices();
+  finalMessage.style.display = "none";
+  story.textContent = "Are you ready for the adventure?";
+  startBtn.style.display = "inline-block";
+}
+
+function startHearts() {
+  let count = 0;
+  const heartInterval = setInterval(() => {
+    if(count > 30) { clearInterval(heartInterval); return; }
+    createHeart();
+    count++;
+  }, 100);
+}
+
+function createHeart() {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.textContent = "❤️";
+  heart.style.left = (Math.random() * 100 - 50) + "%";
+  heartsDiv.appendChild(heart);
+  setTimeout(() => heart.remove(), 3000);
 }
 </script>
 
