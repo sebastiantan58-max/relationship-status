@@ -50,6 +50,13 @@
     margin-top: 50px;
     display: none;
   }
+  #hint {
+    font-size: 20px;
+    color: #ff6b81;
+    margin-top: 20px;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
 </style>
 </head>
 <body>
@@ -58,6 +65,7 @@
 <div id="game">
   <p id="story">Are you ready for the adventure?</p>
   <button id="startBtn">Start</button>
+  <p id="hint"></p>
 </div>
 
 <div id="finalMessage">💖 YES! 💖</div>
@@ -69,11 +77,16 @@ const startBtn = document.getElementById("startBtn");
 const gameDiv = document.getElementById("game");
 const finalMessage = document.getElementById("finalMessage");
 const heartsDiv = document.getElementById("hearts");
+const hint = document.getElementById("hint");
+
+let noCount = 0; // tracks "No" clicks on Level 2
+let hintTimeout;  // to fade out hint
 
 startBtn.onclick = () => {
   story.textContent = "Level 1: We matched on that app and have been texting since January 2026… Are you ready to take our adventure to the next level?";
   startBtn.style.display = "none";
   showChoices(["Yes", "No"], level2);
+  hideHint();
 };
 
 function showChoices(options, callback) {
@@ -89,43 +102,38 @@ function showChoices(options, callback) {
 function clearChoices() {
   const buttons = gameDiv.querySelectorAll("button");
   buttons.forEach(b => b.remove());
+  hideHint();
 }
 
-let noCount = 0; // tracks how many times "No" was clicked
+function hideHint() {
+  hint.style.opacity = 0;
+  if (hintTimeout) clearTimeout(hintTimeout);
+}
 
 function level2(choice) {
   clearChoices();
-  if(choice === "Yes") {
+  if (choice === "Yes") {
     story.textContent = "Level 2: After all our texts and laughs, I have to ask… Will you be my girlfriend?";
+    noCount = 0;
     showChoices(["Yes", "No"], finalLevel);
   } else {
     noCount++;
-    if(noCount === 1){
-      story.textContent = "Are you sure? 😅";
-      showChoices(["Yes", "No"], level2); // loop back for confirmation
-    } else {
-      story.textContent = "Oh no! Looks like we’re not ready yet 😢 — Try again!...Looks like i am stuck in an infinite loop of waiting 😅. I will try again.";
-      showChoices(["Restart"], restartGame);
-      noCount = 0; // reset for next round
-    }
-  }
-}
+    if (noCount === 1) {
+      story.textContent = "Are you sure? 😅 I have a surprise if you say Yes!";
+      hint.textContent = "Hint: It’s full of ❤️ and fun!";
+      hint.style.opacity = 1;
 
-function finalLevel(choice) {
-  clearChoices();
-  if(choice === "Yes") {
-    story.textContent = "";
-    finalMessage.style.display = "block";
-    startHearts();
-  } else {
-    noCount++;
-    if(noCount === 1){
-      story.textContent = "Are you sure? 😅";
-      showChoices(["Yes", "No"], finalLevel); // confirmation loop
+      // Fade out after 4 seconds if she doesn’t click Yes
+      hintTimeout = setTimeout(() => {
+        hint.style.opacity = 0;
+      }, 4000);
+
+      showChoices(["Yes", "No"], level2);
     } else {
-      story.textContent = "Hmm… not yet 😅 — Try again!";
+      story.textContent = "Oh no! 😢 — Like a broken circuit, we’re not quite connected yet! 😢 —It's Okay, Since You Are Still As Cute As Ever..I Will Try Again!😉 ";
       showChoices(["Restart"], restartGame);
-      noCount = 0; // reset
+      noCount = 0;
+      hideHint();
     }
   }
 }
@@ -147,6 +155,8 @@ function restartGame() {
   finalMessage.style.display = "none";
   story.textContent = "Are you ready for the adventure?";
   startBtn.style.display = "inline-block";
+  noCount = 0;
+  hideHint();
 }
 
 function startHearts() {
