@@ -108,7 +108,7 @@ function hideHint() {
   if (hintTimeout) clearTimeout(hintTimeout);
 }
 
-// ------------------- Level 2 -------------------
+// -------- Level 2 --------
 function level2(choice) {
   clearChoices();
   if (choice === "Yes") {
@@ -124,15 +124,15 @@ function level2(choice) {
       hintTimeout = setTimeout(() => hint.style.opacity = 0, 4000);
       showChoices(["Yes", "No"], level2);
     } else {
-      story.textContent = "Oh no! 😢 — Like a broken circuit, we’re not quite connected yet! 😉 — Try again!";
-      showChoices(["Restart"], restartGame);
+      story.textContent = "Oh no! 😢 — Like a Pokémon battle, we fainted… but we can try again! 😉";
+      showChoices(["🔄 Restart Adventure"], refreshPage);
       noCount = 0;
       hideHint();
     }
   }
 }
 
-// ------------------- Final Level -------------------
+// -------- Final Level --------
 function finalLevel(choice) {
   clearChoices();
   if (choice === "Yes") {
@@ -140,22 +140,17 @@ function finalLevel(choice) {
     finalMessage.style.display = "block";
     startHearts();
   } else {
-    story.textContent = "Hmm… not yet 😅 — Try again!";
-    showChoices(["Restart"], restartGame);
+    story.textContent = "Hmm… not yet 😅 — Let’s try again!";
+    showChoices(["🔄 Restart Adventure"], refreshPage);
   }
 }
 
-// ------------------- Restart -------------------
-function restartGame() {
-  clearChoices();
-  finalMessage.style.display = "none";
-  story.textContent = "Are you ready for the adventure?";
-  startBtn.style.display = "inline-block";
-  noCount = 0;
-  hideHint();
+// -------- Refresh --------
+function refreshPage() {
+  location.reload();
 }
 
-// ------------------- Hearts Animation -------------------
+// -------- Hearts Animation --------
 function startHearts() {
   let count = 0;
   const heartInterval = setInterval(() => {
