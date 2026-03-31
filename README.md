@@ -1,35 +1,68 @@
 # Repository: relationship-status
 
-## README.md
+##################################################
+#                                                #
+#       ♥   ♥     🎮 RELATIONSHIP QUEST v2.0 🎮     ♥   ♥ #
+#         ♥ ♥                                  ♥ ♥     #
+#          ♥                                    ♥      #
+#                                                #
+#              ⭐✨ A Retro Adventure ✨⭐           #
+##################################################
 
-### Feature Request
-> Add new role: Girlfriend
+## Objective
+Complete the quest to unlock a **special question** 👀
 
-### Description
-I have liked you for a while...and yes, I have been thinking about this for a while.
+──────────────────────────────────────────────────
+🧩 Level 1: Compatibility Check
+──────────────────────────────────────────────────
+- You like talking to me ✅
+- I like talking to you ✅
+- We laugh at dumb things ✅
 
-### Proposed Changes
-- Add you as a permanent collaborator ❤️
-- Enable shared laughs & random adventures
-- Increase happiness to 100%
+Status: PASSED 🎉
 
-### Implementation
+──────────────────────────────────────────────────
+🧠 Level 2: Logic Puzzle
+──────────────────────────────────────────────────
+if (we.keepTalking == true) {
+    happiness++;
+}
+
+Result: Happiness increasing 📈  
+// +10 XP for each smile 😏
+
+──────────────────────────────────────────────────
+❤️ Level 3: Risky Move
+──────────────────────────────────────────────────
+     🧑‍💻 Hero: Me
+     🏹 Weapon: My Heart
+// Warning: serious emotional damage possible
+
 function confess() {
     if (you.accept == true) {
-        me.status = "Happiest man alive ❤️";
-        console.log("Deployment successful 🚀");
+        return "🎊 Achievement Unlocked: Girlfriend 🎊";
     } else {
-        me.status = "Entering infinite sadness loop 😭";
-        while(true) {
-            console.log("retrying...");
-        }
+        return "💀 Game Over (but will still be retrying...)";
     }
 }
 
-### Note
-⚠️ This might look like an April Fools joke... but it's actually not 😅
+──────────────────────────────────────────────────
+🔓 Final Boss Question
+──────────────────────────────────────────────────
+Will you accept this quest and be my girlfriend? 💖
 
-### Final Question
-Will you merge this request and be my girlfriend?
+──────────────────────────────────────────────────
+✨ Stats & Bonuses ✨
+──────────────────────────────────────────────────
+| Stat         | Value         |
+|--------------|---------------|
+| Happiness    | 100%          |
+| Courage      | MAX           |
+| Love Level   | OVER 9000 💕   |
+| Smiles Made  | Infinite 😄   |
 
-⚠️ This looks like a joke… but I actually mean it
+──────────────────────────────────────────────────
+⚠️ Plot Twist
+This looks like an April Fools game...
+
+…but I’m actually serious 😅
